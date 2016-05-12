@@ -1,5 +1,7 @@
 package com.example;
 
+import com.example.app.Argument;
+import com.example.app.ArgumentResolver;
 import com.example.app.Calculator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -13,6 +15,7 @@ import java.util.Scanner;
 public class App {
     public static void main( String[] args ) {
         try (ConfigurableApplicationContext context = SpringApplication.run(App.class, args)) {
+            /* argumentResolver 追加前
             Scanner scanner = new Scanner(System.in);
             System.out.print("Enter 2 numbers like 'a b' : ");
             int a = scanner.nextInt();
@@ -21,6 +24,14 @@ public class App {
             Calculator calculator = context.getBean(Calculator.class);
             int result = calculator.calc(a, b);
             System.out.println("result = " + result);
+            */
+
+            System.out.print("Enter 2 numbers like 'a b' : ");
+            ArgumentResolver argumentResolver = context.getBean(ArgumentResolver.class);
+            Argument argument = argumentResolver.resolve(System.in);
+            Calculator calculator = context.getBean(Calculator.class);
+            int result = calculator.calc(argument.getA(), argument.getB());
+            System.out.println("result=" + result);
         }
     }
 }

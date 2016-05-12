@@ -1,4 +1,7 @@
 com/example/app/AddCalculator.class
-com/example/app/Calculator.class
 com/example/App.class
+com/example/app/ArgumentResolver.class
 com/example/AppConfig.class
+com/example/app/Calculator.class
+com/example/app/ScannerArgumentResolver.class
+com/example/app/Argument.class
