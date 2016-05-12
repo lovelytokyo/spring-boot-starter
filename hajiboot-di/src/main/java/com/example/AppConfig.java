@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
     @Bean
-    Caculator calculator() {
+    Calculator calculator() {
         return new AddCalculator();
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 import java.util.Scanner;
 
 @EnableAutoConfiguration
-@import(AppConfig.class)
+@Import(AppConfig.class)
 public class App {
     public static void main( String[] args ) {
         try (ConfigurableApplicationContext context = SpringApplication.run(App.class, args)) {
