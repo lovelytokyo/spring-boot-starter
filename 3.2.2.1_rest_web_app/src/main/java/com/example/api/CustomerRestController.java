@@ -3,10 +3,8 @@ package com.example.api;
 import com.example.domain.Customer;
 import com.example.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,4 +33,24 @@ public class CustomerRestController {
         return customer;
     }
 
+    // 顧客新規作成
+    @RequestMapping(method = RequestMethod.POST) // POST /api/customers でアクセスするとこのメソッドが実行される
+    @ResponseStatus(HttpStatus.CREATED) // ResposeStatusアノテーションでAPIの通常時HTTPレスポンスが設定できる。「201 CREATED」を返却する
+    Customer postCustomers(@RequestBody Customer customer /* HTTPリクエストのボティをCustomerオブジェクトにマッピングするため「RequestBodyアノテーションをつける」 */) {
+        return customerService.create(customer);
+    }
+
+    // 顧客１件更新
+    @RequestMapping(value="{id}", method = RequestMethod.PUT) // putCustomerメソッドに対してHTTPメソッドPUTを割り当てる
+    Customer putCustomer(@PathVariable Integer id, @RequestBody Customer customer) {
+        customer.setId(id);
+        return customerService.update(customer);
+    }
+
+    // 顧客１件削除
+    @RequestMapping(value="{id}", method = RequestMethod.DELETE) // deleteCustomerメソッドに対してHTTPメソッドDELETEを割り当てる
+    @ResponseStatus(HttpStatus.NO_CONTENT) // 204 NO_CONTENTを返却する
+    void deleteCustomer(@PathVariable Integer id) {
+        customerService.delete(id);
+    }
 }
