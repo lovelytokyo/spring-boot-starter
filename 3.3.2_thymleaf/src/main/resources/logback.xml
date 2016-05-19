@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <!-- Spring bootが予め用意している基本的な設定を読み込む -->
+    <include resource="org/springframework/boot/logging/logback/base.xml" />
+    <!-- Log4JDBCはいろいろなログを出力するが、ここでSQLログだけ出力したいのでそれ以外をOFF -->
+    <logger name="jdbc" level="OFF" />
+    <!-- SQLログは、デバックレベルで出力されるためそれ以外は出力しないようにOFFに設定 -->
+    <!-- sqltimingは、SQL分＋実行時間をログ出力 -->
+    <logger name="jdbc.sqltiming" level="DEBUG" />
+</configuration>
