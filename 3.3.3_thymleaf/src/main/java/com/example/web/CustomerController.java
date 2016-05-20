@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
 import java.util.List;
 
 @Controller // 画面遷移用コントローラアノテーション
@@ -24,12 +21,10 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
 
-    @ModelAttribute
+    @ModelAttribute  // コントローラ内のRequestmappingされたメソッドの前に実行され、返り値は自動でModelに追加される
     CustomerForm setUpForm() {
-        return new CustomerForm();
+        return new CustomerForm(); // CusomerForm 初期化
     }
-
-    private Logger logger = null;
 
     @RequestMapping(method = RequestMethod.GET) // GET /customers
     String list(Model model /* 画面に値を渡すためにModelオブジェクトを使う */) {
@@ -41,8 +36,11 @@ public class CustomerController {
         return "customers/list";
     }
 
-    @RequestMapping(value = "create", method = RequestMethod.GET)
-    String create(@Validated CustomerForm form, BindingResult result, Model model) {
+    @RequestMapping(value = "create", method = RequestMethod.POST)
+    String create(@Validated /* フォームの情報の入力チェックを行う。CustomerFormに設定したBean Validationのアノテーションが評価され、結果がBindingResultに格納される */
+                          CustomerForm form, BindingResult result, Model model) {
+
+        // 入力チェックの結果を確認し、エラーがある場合は一覧画面表示に戻る
         if (result.hasErrors()) {
             return list(model);
         }
@@ -66,10 +64,6 @@ public class CustomerController {
             return editForm(id, form);
         }
 
-
-//        logger = Logger.getLogger(this.getClass().getName());
-//        logger.log(Level.SEVERE, "えらいこっちゃ!!");
-
         Customer customer = new Customer();
         BeanUtils.copyProperties(form, customer);
         customer.setId(id);
@@ -78,9 +72,14 @@ public class CustomerController {
     }
 
     // (4)
-    @RequestMapping(value="edit", params = "goToTop")
+    @RequestMapping(value = "edit", params = "goToTop")
     String goToTop() {
         return "redirect:/customers";
     }
 
+    @RequestMapping(value = "delete", method = RequestMethod.POST)
+    String delete(@RequestParam Integer id) {
+        customerService.delete(id);
+        return "redirect:/customers";
+    }
 }
